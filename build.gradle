@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.wjproject'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web' // SpringBoot Starter Dependency
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9' // Swagger Dependency
+    implementation 'org.springframework.boot:spring-boot-starter-security' // Spring Security Dependency
+    implementation 'org.apache.commons:commons-lang3:3.18.0' // Swagger Dependency가 해당 전이 의존성을 호출하면서 특정 버전에서 취약점 발생으로, 문제 없는 버전의 Dependency 사용
+    implementation 'org.projectlombok:lombok' // lombok Dependency
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA Dependency
+    runtimeOnly 'org.postgresql:postgresql' // PostgreSQL
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5' // JWT Token Dependency
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}

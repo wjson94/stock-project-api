@@ -4,47 +4,59 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
+import com.wjproject.stockproject.global.security.principal.CustomUserDetailsService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 @Component
-public class JwtAuthenticationFilter
-        extends GenericFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
-            JwtTokenProvider jwtTokenProvider
+            JwtTokenProvider jwtTokenProvider,
+            CustomUserDetailsService userDetailsService
     ) {
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtTokenProvider   = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain
-    ) throws IOException, ServletException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
-        HttpServletRequest httpRequest =
-                (HttpServletRequest) request;
+        String token = resolveToken(request);
 
-        String bearerToken =
-                httpRequest.getHeader("Authorization");
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            String userId = jwtTokenProvider.getUserId(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
 
-        if (bearerToken != null
-                && bearerToken.startsWith("Bearer ")) {
-
-            String token =
-                    bearerToken.substring(7);
-
-            boolean valid =
-                    jwtTokenProvider.validate(token);
-
-            if (!valid) {
-                throw new RuntimeException("JWT 오류");
-            }
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String bearer = request.getHeader("Authorization");
+        if (bearer != null && bearer.startsWith("Bearer ")) {
+            return bearer.substring(7);
+        }
+        return null;
     }
 }

@@ -17,6 +17,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security' // Spring Security Dependency
     implementation 'org.apache.commons:commons-lang3:3.18.0' // Swagger Dependency가 해당 전이 의존성을 호출하면서 특정 버전에서 취약점 발생으로, 문제 없는 버전의 Dependency 사용
     implementation 'org.projectlombok:lombok' // lombok Dependency
+    annotationProcessor 'org.projectlombok:lombok'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA Dependency
     runtimeOnly 'org.postgresql:postgresql' // PostgreSQL

@@ -1,63 +1,54 @@
 package com.wjproject.stockproject.global.security.jwt;
 
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
-    private final Key key;
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    public JwtTokenProvider(
-            @Value("${jwt.secret}") String secretKey
-    ) {
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
-    }
+    @Value("${jwt.expiration}")
+    private long expiration;
 
-    public String createToken(String email) {
-
-        Date now = new Date();
-
-        Date expire = new Date(
-                now.getTime() + 1000 * 60 * 60
-        );
-
+    public String createToken(String userId) {
         return Jwts.builder()
-                .subject(email)
-                .issuedAt(now)
-                .expiration(expire)
-                .signWith(key)
+                .subject(userId)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
                 .compact();
     }
 
-    public String getEmail(String token) {
-
-        return Jwts.parser()
-                .verifyWith((javax.crypto.SecretKey) key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+    public String getUserId(String token) {
+        return getClaims(token).getSubject();
     }
 
-    public boolean validate(String token) {
-
+    public boolean validateToken(String token) {
         try {
-
-            Jwts.parser()
-                    .verifyWith((javax.crypto.SecretKey) key)
-                    .build()
-                    .parseSignedClaims(token);
-
+            getClaims(token);
             return true;
-
-        } catch (Exception e) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 }

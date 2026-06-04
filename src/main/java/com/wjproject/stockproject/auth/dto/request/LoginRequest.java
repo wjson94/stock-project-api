@@ -1,16 +1,11 @@
 package com.wjproject.stockproject.auth.dto.request;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 public class LoginRequest {
-
-    private String id;
+    private String userId;
     private String password;
-
-    public String getId() {
-        return id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
 }

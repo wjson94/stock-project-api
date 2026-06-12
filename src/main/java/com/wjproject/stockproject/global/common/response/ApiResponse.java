@@ -15,12 +15,17 @@ public class ApiResponse<T> {
     private ErrorResponse error;
     private MetaResponse meta;
 
-    // 성공
-    public static <T> ApiResponse<T> success(T data, String requestId) {
-        return new ApiResponse<>(true, data, null, MetaResponse.requestId(requestId));
+    // Success 200(Request Success)
+    public static <T> ApiResponse<T> success(T data) {
+        return new ApiResponse<>(true, data, null, MetaResponse.of());
     }
 
-    // 실패
+    // Success 201(Create Success)
+    public static <T> ApiResponse<T> created(T data) {
+        return new ApiResponse<>(true, data, null, MetaResponse.of());
+    }
+
+    // Fail
     public static <T> ApiResponse<T> fail(ErrorResponse error) {
         return new ApiResponse<>(false, null, error, null);
     }

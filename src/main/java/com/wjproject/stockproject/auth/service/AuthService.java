@@ -7,25 +7,17 @@ import com.wjproject.stockproject.auth.repository.UserRepository;
 import com.wjproject.stockproject.global.common.exception.CustomException;
 import com.wjproject.stockproject.global.common.response.ErrorCode;
 import com.wjproject.stockproject.global.security.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public AuthService(
-            JwtTokenProvider jwtTokenProvider,
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public LoginResponse login(
             LoginRequest request

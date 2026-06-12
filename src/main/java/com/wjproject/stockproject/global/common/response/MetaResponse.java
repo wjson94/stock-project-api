@@ -9,15 +9,13 @@ import java.time.format.DateTimeFormatter;
 public class MetaResponse {
 
     private final String timestamp;
-    private final String requestId;
 
-    private MetaResponse(String requestId) {
+    private MetaResponse() {
         this.timestamp = ZonedDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
-        this.requestId = requestId;
     }
 
-    public static MetaResponse requestId(String requestId) {
-        return new MetaResponse(requestId);
+    public static MetaResponse of() {
+        return new MetaResponse();
     }
 }

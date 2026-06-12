@@ -31,7 +31,10 @@ public class SecurityConfig {
                         // Swagger 허용
                         .requestMatchers(
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/ws/**",
+                                "/topic/**",
+                                "/app/**"
                         ).permitAll()
 
                         // 로그인 API 허용

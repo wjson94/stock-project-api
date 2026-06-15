@@ -23,14 +23,14 @@ public class AuthService {
             LoginRequest request
     ) {
 
-        User user = userRepository.findByUserId(request.getUserId())
+        User user = userRepository.findByLoginId(request.getLoginId())
                 .orElseThrow(() -> new CustomException(ErrorCode.STOCK_LOGIN_FAILED));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.STOCK_LOGIN_FAILED);
         }
 
-        String token = jwtTokenProvider.createToken(user.getUserId());
+        String token = jwtTokenProvider.createToken(user.getLoginId());
 
         return new LoginResponse(token);
     }

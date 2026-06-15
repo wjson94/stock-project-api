@@ -21,8 +21,8 @@ public class ApiResponse<T> {
     }
 
     // Success 201(Create Success)
-    public static <T> ApiResponse<T> created(T data) {
-        return new ApiResponse<>(true, data, null, MetaResponse.of());
+    public static <T> ApiResponse<T> created() {
+        return new ApiResponse<>(true, null, null, MetaResponse.of());
     }
 
     // Fail

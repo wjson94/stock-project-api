@@ -2,6 +2,8 @@ package com.wjproject.stockproject.global.security.principal;
 
 import com.wjproject.stockproject.auth.entity.User;
 import com.wjproject.stockproject.auth.repository.UserRepository;
+import com.wjproject.stockproject.global.common.exception.CustomException;
+import com.wjproject.stockproject.global.common.response.ErrorCode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,12 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("유저 없음: " + userId));
+    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STOCK_UNAUTHORIZED));
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUserId())
+                .withUsername(user.getLoginId())
                 .password(user.getPassword())
                 .roles("USER")
                 .build();

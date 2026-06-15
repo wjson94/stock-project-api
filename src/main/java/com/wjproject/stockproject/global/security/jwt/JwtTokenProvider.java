@@ -18,16 +18,16 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String createToken(String userId) {
+    public String createToken(String loginId) {
         return Jwts.builder()
-                .subject(userId)
+                .subject(loginId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    public String getUserId(String token) {
+    public String getLoginId(String token) {
         return getClaims(token).getSubject();
     }
 

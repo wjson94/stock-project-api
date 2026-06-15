@@ -11,10 +11,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tb_user", schema = "public")
 public class User {
+
     @Id
-    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String userId;
+    @Column(name = "user_seq")
+    private Long userSeq;
+
+    @Column(name = "login_id", nullable = false, unique = true, length = 50)
+    private String loginId;
 
     @Column(nullable = false)
     private String name;
@@ -22,6 +26,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 }

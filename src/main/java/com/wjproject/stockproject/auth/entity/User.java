@@ -21,10 +21,10 @@ public class User {
     private String loginId;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, length = 100)
+    private String name;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

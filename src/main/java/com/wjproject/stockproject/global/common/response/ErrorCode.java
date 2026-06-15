@@ -11,6 +11,7 @@ public enum ErrorCode {
     STOCK_LOGIN_FAILED("STOCK_LOGIN_FAILED", "아이디 또는 비밀번호가 올바르지 않습니다.", 401),
     STOCK_UNAUTHORIZED("STOCK_UNAUTHORIZED", "엑세스 권한이 없습니다.", 401),
     STOCK_NOT_FOUND("STOCK_NOT_FOUND", "요청된 리소스를 찾을 수 없습니다.", 404),
+    STOCK_DUPLICATE_INTEREST("STOCK_DUPLICATE_INTEREST", "이미 관심 종목에 등록되었습니다.", 409),
     STOCK_SERVER_ERROR("STOCK_SERVER_ERROR", "서버 오류가 발생했습니다.", 500);
 
     private final String code;

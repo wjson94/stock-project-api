@@ -23,10 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STOCK_UNAUTHORIZED));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getLoginId())
-                .password(user.getPassword())
-                .roles("USER")
-                .build();
+        return new CustomUserDetails(
+                user.getUserSeq(),
+                user.getLoginId(),
+                user.getPassword()
+        );
     }
 }

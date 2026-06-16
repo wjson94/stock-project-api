@@ -9,6 +9,7 @@ import com.wjproject.stockproject.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +32,28 @@ public class TrendController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @Operation(summary = "관심 종목 등록")
+    @Operation(summary = "관심 종목 추가")
     @PostMapping("/interest")
-    public ResponseEntity<ApiResponse<Void>> addInterestStock(@AuthenticationPrincipal CustomUserDetails user, @RequestBody InterestStockRequest request) {
+    public ResponseEntity<ApiResponse<Void>> addInterestStock(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @RequestBody InterestStockRequest request) {
 
         interestService.addInterestStock(user.getUserSeq(), request.getStockCode());
 
-        return ResponseEntity.ok(ApiResponse.created());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.created());
+    }
+
+    @Operation(summary = "관심 종목 삭제")
+    @DeleteMapping("/interest/{stockCode}")
+    public ResponseEntity<ApiResponse<Void>> removeInterestStock(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable String stockCode
+    ) {
+
+        interestService.removeInterestStock(user.getUserSeq(), stockCode);
+
+        return ResponseEntity.ok(ApiResponse.success());
     }
 }

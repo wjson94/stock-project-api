@@ -6,13 +6,16 @@ import com.wjproject.stockproject.interest.entity.InterestStock;
 import com.wjproject.stockproject.interest.repository.InterestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class InterestService {
 
     private final InterestRepository interestRepository;
 
+    @Transactional
     public void addInterestStock(Long userSeq, String stockCode) {
 
         if (interestRepository.existsByUserSeqAndStockCode(userSeq, stockCode)) {
@@ -25,5 +28,15 @@ public class InterestService {
                 .build();
 
         interestRepository.save(interestStock);
+    }
+
+    @Transactional
+    public void removeInterestStock(Long userSeq, String stockCode) {
+
+        int deleteCount = interestRepository.deleteByUserSeqAndStockCode(userSeq, stockCode);
+
+        if (deleteCount == 0) {
+            throw new CustomException(ErrorCode.STOCK_NOT_FOUND);
+        }
     }
 }

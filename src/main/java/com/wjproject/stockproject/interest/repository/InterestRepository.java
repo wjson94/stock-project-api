@@ -9,4 +9,6 @@ public interface InterestRepository extends JpaRepository<InterestStock, Long> {
             Long userSeq,
             String stockCode
     );
+
+    int deleteByUserSeqAndStockCode(Long userSeq, String stockCode);
 }

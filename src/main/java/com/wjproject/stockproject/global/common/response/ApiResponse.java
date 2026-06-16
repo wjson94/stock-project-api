@@ -20,6 +20,11 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, data, null, MetaResponse.of());
     }
 
+    // Success 200(Request delete / update)
+    public static <T> ApiResponse<T> success() {
+        return new ApiResponse<>(true, null, null, MetaResponse.of());
+    }
+
     // Success 201(Create Success)
     public static <T> ApiResponse<T> created() {
         return new ApiResponse<>(true, null, null, MetaResponse.of());

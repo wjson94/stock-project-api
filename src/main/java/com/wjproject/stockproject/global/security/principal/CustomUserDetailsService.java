@@ -1,7 +1,7 @@
 package com.wjproject.stockproject.global.security.principal;
 
-import com.wjproject.stockproject.auth.entity.User;
-import com.wjproject.stockproject.auth.repository.UserRepository;
+import com.wjproject.stockproject.domain.auth.entity.User;
+import com.wjproject.stockproject.domain.auth.repository.UserRepository;
 import com.wjproject.stockproject.global.common.exception.CustomException;
 import com.wjproject.stockproject.global.common.response.ErrorCode;
 import org.springframework.security.core.userdetails.UserDetails;
